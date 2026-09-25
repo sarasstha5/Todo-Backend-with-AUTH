@@ -1,17 +1,18 @@
 from fastapi import APIRouter, Depends, HTTPException, Response
 from sqlalchemy.orm import Session
-from schema.todo import TodoBase,TodoResponse, TodoUpdate
+from src.schema.todo import TodoBase,TodoResponse, TodoUpdate
 from src.db.database import get_db
 from src.todos.model import Todo
 
 router = APIRouter(prefix="/todos")
 
 @router.post("/")
-def create_todo(todo:TodoBase, db:Session = Depends(get_db)):
+def create_todo(todo:TodoBase, user_id: int, db:Session = Depends(get_db)):
     new_todo = Todo(
         title= todo.title,
         description=todo.description,
-        is_completed = todo.is_completed
+        is_completed = todo.is_completed,
+        user_id = user_id
     )
 
     db.add(new_todo)
