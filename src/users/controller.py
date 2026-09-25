@@ -1,9 +1,9 @@
 from fastapi import APIRouter,Depends,HTTPException
-from src.schema.user import UserBase,UserBaseResponse
+from src.schema.user import UserBase,UserBaseResponse,Userlogin
 from sqlalchemy.orm import Session
 from src.db.database import get_db
 from src.users.model import User 
-from src.auth.security import get_password_hash
+from src.auth.security import get_password_hash,verify_password,create_token
 
 router = APIRouter(prefix="/users")
 
@@ -31,3 +31,32 @@ def register(body:UserBase, db:Session = Depends(get_db)):
     db.commit()
     db.refresh(new_user)
     return new_user
+
+@router.post("/login")
+def login(body:Userlogin,user_id, db:Session = Depends(get_db)):
+    email = db.query(User).filter(User.email == body.email).first()
+    if not email:
+        raise HTTPException(
+            status = 401,
+            detail = "do not match email or password"
+        )
+
+    password = db.query(User).filter(User.password == verify_password(body.password) ).first()
+    if not password:
+        raise HTTPException(
+                status = 401,
+                detail = "do not match email or password"
+            )
+
+    token = create_token(
+        {
+            "sub":user_id
+        }
+    )
+
+    return {
+        "access_token": token,
+        "token_type" : "Bearer"
+    }
+
+    
