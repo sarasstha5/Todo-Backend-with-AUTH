@@ -33,16 +33,15 @@ def register(body:UserBase, db:Session = Depends(get_db)):
     return new_user
 
 @router.post("/login")
-def login(body:Userlogin,user_id, db:Session = Depends(get_db)):
-    email = db.query(User).filter(User.email == body.email).first()
-    if not email:
+def login(body:Userlogin, db:Session = Depends(get_db)):
+    user = db.query(User).filter(User.email == body.email).first()
+    if not user:
         raise HTTPException(
-            status = 401,
+            status_code = 401,
             detail = "do not match email or password"
         )
 
-    password = db.query(User).filter(User.password == verify_password(body.password) ).first()
-    if not password:
+    if not verify_password(body.password, user.hashed_password):
         raise HTTPException(
                 status = 401,
                 detail = "do not match email or password"
@@ -50,7 +49,7 @@ def login(body:Userlogin,user_id, db:Session = Depends(get_db)):
 
     token = create_token(
         {
-            "sub":user_id
+            "sub":user.id
         }
     )
 

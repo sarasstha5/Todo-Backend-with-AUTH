@@ -1,7 +1,7 @@
 from pwdlib import PasswordHash
 from jose import jwt 
 from datetime import datetime, timedelta, timezone
-from src.utils import settings
+from src.utils.settings import settings
 
 SECRET_KEY = settings.SECRET_KEY
 ALGORITHM = settings.ALGORITHM
