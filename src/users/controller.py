@@ -3,7 +3,7 @@ from src.schema.user import UserBase,UserBaseResponse,Userlogin
 from sqlalchemy.orm import Session
 from src.db.database import get_db
 from src.users.model import User 
-from src.auth.security import get_password_hash,verify_password,create_token
+from src.auth.security import get_password_hash,verify_password,create_token,verify_token
 
 router = APIRouter(prefix="/users")
 
@@ -49,13 +49,21 @@ def login(body:Userlogin, db:Session = Depends(get_db)):
 
     token = create_token(
         {
-            "sub":user.id
+            "id":user.id
         }
     )
 
     return {
         "access_token": token,
         "token_type" : "Bearer"
+    }
+
+@router.get("/secure")
+def get_me(current_user = Depends(verify_token)):
+    return {
+        "id": current_user.id,
+        "username": current_user.name,
+        "email": current_user.email
     }
 
     

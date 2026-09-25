@@ -9,8 +9,8 @@ router = APIRouter(prefix="/todos")
 @router.post("/")
 def create_todo(todo:TodoBase, user_id: int, db:Session = Depends(get_db)):
     new_todo = Todo(
-        title= todo.title,
-        description=todo.description,
+        Title= todo.title,
+        Description=todo.description,
         is_completed = todo.is_completed,
         user_id = user_id
     )
