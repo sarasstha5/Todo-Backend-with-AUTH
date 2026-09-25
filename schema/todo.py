@@ -9,3 +9,9 @@ class TodoResponse(TodoBase):
     title:str
     description:str
     is_completed: bool
+
+# Data received when updating a todo
+class TodoUpdate(BaseModel):
+    title: str
+    description: str
+    completed: bool
