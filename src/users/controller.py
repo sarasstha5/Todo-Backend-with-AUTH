@@ -4,13 +4,14 @@ from sqlalchemy.orm import Session
 from src.db.database import get_db
 from src.users.model import User 
 from src.auth.security import get_password_hash,verify_password,create_token,verify_token
+from src.utils.mail import send_email
 
 router = APIRouter(prefix="/users")
 
 
 
 @router.post("/register" ,response_model= UserBaseResponse)
-def register(body:UserBase, db:Session = Depends(get_db)):
+async def register(body:UserBase, db:Session = Depends(get_db)):
     is_user = db.query(User).filter(User.email == body.email).first()
 
     if is_user:
@@ -30,6 +31,11 @@ def register(body:UserBase, db:Session = Depends(get_db)):
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
+
+    #send email confirmation
+    email = await send_email(new_user.email)
+    print(email)
+
     return new_user
 
 @router.post("/login")

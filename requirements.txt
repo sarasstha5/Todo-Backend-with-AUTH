@@ -4,4 +4,5 @@ sqlalchemy
 pydantic-settings
 pwdlib[argon2]
 python-jose
+fastapi-mail #all code from github repo- just search fastapi mail and the first or second is the repo go and do as it is said.
 

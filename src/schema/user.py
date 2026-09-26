@@ -5,10 +5,10 @@ class UserBase(BaseModel):
     email:str
     password:str=Field(min_length=8)
 
-class UserBaseResponse(UserBase):
-    username:str
-    email:str
+class UserBaseResponse(BaseModel):
     id: int
+    name:str
+    email:str
 
 class Userlogin(BaseModel):
     email:str
