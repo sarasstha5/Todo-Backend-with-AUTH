@@ -58,6 +58,7 @@ def login(body:Userlogin, db:Session = Depends(get_db)):
         "token_type" : "Bearer"
     }
 
+#testing
 @router.get("/secure")
 def get_me(current_user = Depends(verify_token)):
     return {

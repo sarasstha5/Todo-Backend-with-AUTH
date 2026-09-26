@@ -14,4 +14,4 @@ class TodoResponse(TodoBase):
 class TodoUpdate(BaseModel):
     title: str
     description: str
-    completed: bool
+    is_completed: bool

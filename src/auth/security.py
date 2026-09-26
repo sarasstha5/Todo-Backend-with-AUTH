@@ -4,7 +4,7 @@ from jose import jwt
 from datetime import datetime, timedelta, timezone
 from src.utils.settings import settings
 from fastapi.security import OAuth2PasswordBearer
-from src.users.controller import User
+from src.users.model import User
 from src.db.database import get_db
 from sqlalchemy.orm import Session
 
